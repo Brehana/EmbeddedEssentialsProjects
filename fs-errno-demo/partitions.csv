@@ -1,0 +1,6 @@
+# Name,   Type, SubType, Offset,  Size, Flags
+# Custom partition table with LITTLEFS "storage" partition
+nvs,        data, nvs,     ,        0x6000,
+phy_init,   data, phy,     ,        0x1000,
+storage,    data, littlefs, ,        0x10000,
+factory,    app,  factory, ,        1M,
