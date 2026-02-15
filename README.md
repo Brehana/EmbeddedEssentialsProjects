@@ -11,7 +11,6 @@ This repository contains all classwork, exercises, and projects for **Embedded F
 * [Getting Started](#getting-started)
 * [Hardware Requirements](#hardware-requirements)
 * [Software Requirements](#software-requirements)
-* [Example Projects](#example-projects)
 * [Contributing](#contributing)
 * [License](#license)
 * [Acknowledgements](#acknowledgements)
@@ -34,11 +33,10 @@ Embedded Firmware Essentials introduces students to programming microcontrollers
 
 ```
 .
-├── docs/               # Optional: Class notes or reference materials
-├── examples/           # Example programs and exercises
-├── projects/           # Completed projects
-├── src/                # Source code for exercises and projects
-├── include/            # Header files
+├── Week/               # Course Module
+  └── docs/             # Presentation and reference materials.
+  ├── src/              # Project source code
+...
 ├── README.md           # This file
 └── LICENSE             # License information
 ```
@@ -85,17 +83,6 @@ idf.py -p /dev/ttyUSB0 flash monitor
 * **ESP-IDF** (latest stable version)
 * **C Compiler** (provided with ESP-IDF)
 * Terminal or IDE (VSCode recommended with ESP-IDF extension)
-
----
-
-## Example Projects
-
-* LED blink
-* Button-controlled 7-segment display
-* FreeRTOS-based multitasking demos
-* Sensor reading and data logging
-
-*Note: Each example includes its own README with detailed instructions.*
 
 ---
 
