@@ -1,0 +1,2 @@
+source /home/angel/sdmmc/build/gdbinit/symbols
+source /home/angel/sdmmc/build/gdbinit/connect

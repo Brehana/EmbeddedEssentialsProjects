@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+/home/angel/sdmmc/build/CMakeFiles/bootloader
+/home/angel/sdmmc/build/CMakeFiles/bootloader.rule
+/home/angel/sdmmc/build/CMakeFiles/bootloader-complete.rule
+/home/angel/sdmmc/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+/home/angel/sdmmc/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/home/angel/sdmmc/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/home/angel/sdmmc/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/home/angel/sdmmc/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/home/angel/sdmmc/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/home/angel/sdmmc/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

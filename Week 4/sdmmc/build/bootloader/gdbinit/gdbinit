@@ -1,0 +1,2 @@
+source /home/angel/sdmmc/build/bootloader/gdbinit/symbols
+source /home/angel/sdmmc/build/bootloader/gdbinit/connect

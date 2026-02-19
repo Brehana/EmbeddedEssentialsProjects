@@ -1,3 +1,4 @@
 {
-    "idf.currentSetup": "/home/angel/esp/master/esp-idf"
+    "idf.currentSetup": "/home/angel/esp/master/esp-idf",
+    "cmake.sourceDirectory": "/home/angel/EmbeddedEssentialsProjects/Week 1/src/blinky"
 }
