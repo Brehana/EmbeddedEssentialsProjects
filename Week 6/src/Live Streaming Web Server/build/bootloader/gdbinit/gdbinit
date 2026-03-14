@@ -1,0 +1,2 @@
+source /home/angel/ESP32-CAM-ESP-IDF-Live-Streaming-Web-Server/build/bootloader/gdbinit/symbols
+source /home/angel/ESP32-CAM-ESP-IDF-Live-Streaming-Web-Server/build/bootloader/gdbinit/connect
