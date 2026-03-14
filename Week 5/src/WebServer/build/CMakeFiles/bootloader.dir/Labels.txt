@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+/home/angel/WebServer/build/CMakeFiles/bootloader
+/home/angel/WebServer/build/CMakeFiles/bootloader.rule
+/home/angel/WebServer/build/CMakeFiles/bootloader-complete.rule
+/home/angel/WebServer/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+/home/angel/WebServer/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/home/angel/WebServer/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/home/angel/WebServer/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/home/angel/WebServer/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/home/angel/WebServer/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/home/angel/WebServer/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

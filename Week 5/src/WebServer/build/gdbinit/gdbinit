@@ -1,0 +1,2 @@
+source /home/angel/WebServer/build/gdbinit/symbols
+source /home/angel/WebServer/build/gdbinit/connect

@@ -15,5 +15,6 @@
     "--background-index",
     "--query-driver=**",
     "--compile-commands-dir=/home/angel/littlefs-errno-demo/build"
-  ]
+  ],
+  "idf.currentSetup": "/home/angel/esp/master/esp-idf"
 }

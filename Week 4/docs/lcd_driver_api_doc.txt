@@ -1,0 +1,326 @@
+LCD DRIVER API DOCUMENTATION
+================================================================================
+
+FUNCTION: i2c_init()
+================================================================================
+Signature:
+    void i2c_init(void)
+
+Description:
+    Initializes the I2C peripheral as a master device. Configures the I2C bus
+    with specified SDA and SCL pins, enables pull-up resistors, and sets the
+    clock speed to 400kHz. Must be called before any I2C communication.
+
+How to Use:
+    Call this function once during system initialization. It configures I2C_NUM_0
+    with SDA on pin 14 and SCL on pin 13. No parameters required.
+
+Code Example:
+    void app_main(void) {
+        i2c_init();  // Initialize I2C bus
+        lcd_init();  // Now LCD can be initialized
+    }
+
+Configuration Details:
+    - I2C Port: I2C_NUM_0
+    - SDA Pin: 14
+    - SCL Pin: 13
+    - Clock Speed: 400kHz
+    - Pull-up Resistors: Enabled on both SDA and SCL
+
+
+FUNCTION: lcd_init()
+================================================================================
+Signature:
+    void lcd_init(void)
+
+Description:
+    Initializes the LCD1602 display in 4-bit mode. Performs the full
+    initialization sequence including function set, display on/off control,
+    clear display, and entry mode setup. Sets the display to show a blinking
+    cursor.
+
+How to Use:
+    Call this function after i2c_init(). It sends the required initialization
+    commands with appropriate delays. No parameters required.
+
+Code Example:
+    void app_main(void) {
+        i2c_init();
+        lcd_init();  // LCD is now ready for use
+        
+        // Display is initialized with cursor visible and blinking
+    }
+
+Initialization Sequence:
+    - 4-bit mode configuration
+    - Function set (2-line display, 5x8 character font)
+    - Display control (display on, cursor on, blink on)
+    - Display clear
+    - Entry mode (cursor increment, no shift)
+
+
+FUNCTION: lcd_send_cmd(char cmd)
+================================================================================
+Signature:
+    void lcd_send_cmd(char cmd)
+
+Description:
+    Sends a command byte to the LCD via I2C. Splits the command into two 4-bit
+    nibbles and sends them with appropriate control signals (enable and
+    register select bits). Used for LCD control operations like cursor
+    positioning, clear display, etc.
+
+Parameters:
+    - cmd: The command byte to send (e.g., 0x01 for clear display)
+
+How to Use:
+    Use this function to send any LCD command. The function handles 4-bit mode
+    communication automatically by splitting the byte into upper and lower
+    nibbles.
+
+Code Example:
+    // Clear the display
+    lcd_send_cmd(0x01);
+    usleep(1000);
+    
+    // Set entry mode (cursor increment, no shift)
+    lcd_send_cmd(0x06);
+    usleep(1000);
+    
+    // Set cursor position to line 1, position 5
+    lcd_ser_curser(1, 5);
+
+Common Commands:
+    - 0x01: Clear display
+    - 0x02: Return cursor to home position
+    - 0x06: Entry mode set (cursor increment)
+    - 0x0C: Display on, cursor off
+    - 0x0F: Display on, cursor on, blinking
+    - 0x28: Function set (4-bit mode, 2 lines, 5x8 font)
+    - 0x80 + address: Set DDRAM address (cursor position)
+
+
+FUNCTION: lcd_send_char(char ch)
+================================================================================
+Signature:
+    void lcd_send_char(char ch)
+
+Description:
+    Sends a single character to the LCD display at the current cursor position.
+    Splits the character byte into two 4-bit nibbles and sends them with
+    register select bit set to 1 (data mode). Moves the cursor to the next
+    position after writing.
+
+Parameters:
+    - ch: The ASCII character code to display
+
+How to Use:
+    Call this function to write individual characters to the LCD. The cursor
+    automatically advances after each character is displayed.
+
+Code Example:
+    // Display the letter 'A'
+    lcd_send_char('A');
+    
+    // Display a number
+    lcd_send_char('5');
+    
+    // Display a special character
+    lcd_send_char('!');
+
+Note:
+    For multiple characters, use lcd_send_buf() for better performance rather
+    than calling lcd_send_char() repeatedly.
+
+
+FUNCTION: lcd_send_buf(const char *ch, size_t size)
+================================================================================
+Signature:
+    void lcd_send_buf(const char *ch, size_t size)
+
+Description:
+    Sends multiple characters to the LCD display. Iterates through a buffer
+    and calls lcd_send_char() for each byte. More efficient than calling
+    lcd_send_char() individually.
+
+Parameters:
+    - ch: Pointer to character buffer (string or array)
+    - size: Number of characters to send
+
+How to Use:
+    Pass a pointer to your character data and the number of characters to
+    display. Can be used with strings or character arrays.
+
+Code Example:
+    // Display a string
+    const char message[] = "Hello";
+    lcd_send_buf(message, 5);
+    
+    // Display another string
+    const char time[] = "12:45";
+    lcd_send_buf(time, 5);
+    
+    // Using strlen() for dynamic length
+    #include <string.h>
+    const char *text = "Welcome";
+    lcd_send_buf(text, strlen(text));
+
+Note:
+    Ensure the buffer is null-terminated if used with strlen(). The size
+    parameter must not exceed the actual buffer length.
+
+
+FUNCTION: lcd_ser_curser(u_int8_t y, u_int8_t x)
+================================================================================
+Signature:
+    void lcd_ser_curser(u_int8_t y, u_int8_t x)
+
+Description:
+    Sets the cursor position on the LCD display. Uses DDRAM (Display Data RAM)
+    addressing to position the cursor at the specified row and column.
+    Note: Function name has a typo (ser_curser instead of set_cursor).
+
+Parameters:
+    - y: Row number (0 = first line, 1 = second line)
+    - x: Column number (0-15 for 16-character display)
+
+How to Use:
+    Call this function before writing text to position the cursor. The function
+    sends the appropriate DDRAM address command and includes a 40us delay.
+
+Code Example:
+    // Position cursor at first line, first position
+    lcd_ser_curser(0, 0);
+    lcd_send_buf("Line 1", 6);
+    
+    // Position cursor at second line, fifth position
+    lcd_ser_curser(1, 4);
+    lcd_send_buf("Line 2", 6);
+    
+    // Clear and reposition
+    lcd_send_cmd(0x01);  // Clear display
+    usleep(1000);
+    lcd_ser_curser(0, 0);
+    lcd_send_buf("New Text", 8);
+
+DDRAM Address Mapping:
+    - Line 0 (y=0): Addresses 0x00 to 0x0F
+    - Line 1 (y=1): Addresses 0x40 to 0x4F
+
+Valid Ranges:
+    - y: 0-1 (for 2-line display)
+    - x: 0-15 (for 16-character display)
+
+
+FUNCTION: scan_i2c()
+================================================================================
+Signature:
+    void scan_i2c(void)
+
+Description:
+    Scans the I2C bus (I2C_NUM_0) and identifies all connected devices by
+    attempting to read from each address (0x00 to 0x7E). Displays results
+    in a formatted table showing device addresses that respond. Useful for
+    debugging I2C connection issues and verifying device presence.
+
+How to Use:
+    Call this function during development to verify I2C devices are properly
+    connected and accessible. Prints results to console/UART.
+
+Code Example:
+    // During initialization to verify LCD1602 is found
+    void app_main(void) {
+        i2c_init();
+        scan_i2c();  // Should find device at 0x3F
+        
+        // Verify before proceeding with LCD initialization
+        lcd_init();
+    }
+
+Output Example:
+    Scanning i2c bus for device
+    
+    0x0     .       .       .       .       .       .       .       .
+    0x8     .       .       .       .       .       .       .       .
+    ...
+    0x38    .       3F      .       .       .       .       .       .
+
+Notes:
+    - Device at 0x3F indicates LCD1602 with I2C backpack is detected
+    - Dots (.) indicate no device at that address
+    - Connection issues will show missing expected addresses
+    - Enable this for troubleshooting I2C communication problems
+
+
+INITIALIZATION SEQUENCE
+================================================================================
+The proper order to initialize the system:
+
+    void app_main(void) {
+        // Step 1: Initialize I2C bus
+        i2c_init();
+        
+        // Step 2: Optional - Scan for devices
+        scan_i2c();
+        
+        // Step 3: Initialize LCD display
+        lcd_init();
+        
+        // Step 4: Use LCD functions
+        lcd_ser_curser(0, 0);
+        lcd_send_buf("Welcome", 7);
+        
+        // Main application code here
+    }
+
+
+PIN CONFIGURATION
+================================================================================
+I2C Bus:
+    - SDA Pin: GPIO 14
+    - SCL Pin: GPIO 13
+
+I2C Device Address:
+    - LCD1602 with I2C Backpack: 0x3F
+
+4-Bit Mode Communication:
+    I2C byte bit mapping (7-0):
+    Bit 7-6: LCD DB7-DB6
+    Bit 5-4: LCD DB5-DB4
+    Bit 3: LED (backlight control)
+    Bit 2: Enable (E)
+    Bit 1: Read/Write (R/W) - always 0 for write
+    Bit 0: Register Select (RS) - 0 for command, 1 for data
+
+Control Signals:
+    - 0x0C: Enable=1, RS=0 (command with enable)
+    - 0x08: Enable=0, RS=0 (command without enable)
+    - 0x0D: Enable=1, RS=1 (data with enable)
+    - 0x09: Enable=0, RS=1 (data without enable)
+
+
+TIMING REQUIREMENTS
+================================================================================
+All timing delays in microseconds:
+
+    After lcd_init():               1000+ microseconds
+    After command (0x01-0x06):      1000+ microseconds
+    After cursor set (lcd_ser_curser):  40+ microseconds
+    After character write:          No specific requirement
+    I2C Write Timeout:              1000 milliseconds
+
+
+ERROR HANDLING
+================================================================================
+The driver includes basic error reporting for I2C write failures:
+
+    - lcd_send_cmd() prints error code if write fails
+    - lcd_send_char() prints error code if write fails
+    - Error format: "Error no. [error_code] in [operation] [hex_value]"
+
+Example Error Messages:
+    Error no. 1 in command 20
+    Error no. 2 in char 41
+
+Check error codes against ESP-IDF I2C error definitions for debugging.
